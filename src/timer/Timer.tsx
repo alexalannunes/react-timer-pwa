@@ -19,13 +19,8 @@ const Timer: React.FC = () => {
   const [seconds, setSeconds] = useState(0);
 
   useEffect(() => {
-    console.log(time);
     setSeconds(toSeconds(`${time.min}:${time.sec}`));
   }, [time]);
-
-  useEffect(() => {
-    console.log(seconds);
-  }, [seconds]);
 
   const handleMinutesUp = useCallback(() => {
     setTime((p) => ({
