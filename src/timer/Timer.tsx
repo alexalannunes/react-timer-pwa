@@ -1,52 +1,124 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, {
+  Reducer,
+  useCallback,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 import styles from "./styles.module.scss";
 const toTime = (seconds: number) =>
   new Date(seconds * 1000).toISOString().substr(14, 5);
 
+interface State {
+  min: number;
+  sec: number;
+}
+
+interface Action {
+  type:
+    | "RESET_TIME"
+    | "INCREASE_MINUTE"
+    | "DECREASE_MINUTE"
+    | "INCREASE_SECOND"
+    | "DECREASE_SECOND";
+}
+
+const timerReducer = (state: State, action: Action) => {
+  switch (action.type) {
+    case "RESET_TIME":
+      return {
+        ...state,
+        min: 0,
+        sec: 0,
+      };
+    case "INCREASE_MINUTE":
+      return {
+        ...state,
+        min: state.min + 1,
+      };
+    case "DECREASE_MINUTE":
+      return {
+        ...state,
+        min: state.min - 1,
+      };
+    case "INCREASE_SECOND":
+      return {
+        ...state,
+        sec: state.sec + 1,
+      };
+    case "DECREASE_SECOND":
+      return {
+        ...state,
+        sec: state.sec - 1,
+      };
+    default:
+      return state;
+  }
+};
+
 const toSeconds = (time: string) => {
-  const [m, s] = time.split(":");
-  // return String(m).padStart(2, '0')+':'+String(s).padStart(2, '0');
   return time.split(":").reduce((acc, time) => {
     return 60 * acc + +time;
   }, 0);
 };
 
 const Timer: React.FC = () => {
-  const [time, setTime] = useState({
+  const [time, dispatch] = useReducer<Reducer<State, Action>>(timerReducer, {
     min: 0,
     sec: 0,
   });
   const [seconds, setSeconds] = useState(0);
+  const [started, setStarted] = useState(false);
 
   useEffect(() => {
     setSeconds(toSeconds(`${time.min}:${time.sec}`));
   }, [time]);
 
   const handleMinutesUp = useCallback(() => {
-    setTime((p) => ({
-      ...p,
-      min: p.min + 1,
-    }));
+    dispatch({
+      type: "INCREASE_MINUTE",
+    });
   }, [time.min]);
 
   const handleSecondsUp = useCallback(() => {
-    setTime((p) => ({
-      ...p,
-      sec: p.sec + 1,
-    }));
+    dispatch({
+      type: "INCREASE_SECOND",
+    });
   }, [time.sec]);
   const handleMinutesDown = useCallback(() => {
-    setTime((p) => ({
-      ...p,
-      min: p.min - 1,
-    }));
+    dispatch({
+      type: "DECREASE_MINUTE",
+    });
   }, [time.min]);
   const handleSecondsDown = useCallback(() => {
-    setTime((p) => ({
-      ...p,
-      sec: p.sec - 1,
-    }));
+    dispatch({
+      type: "DECREASE_SECOND",
+    });
   }, [time.sec]);
+
+  const handleStart = () => {
+    setStarted(true);
+  };
+
+  console.log("oi");
+
+  useEffect(() => {
+    let a: number;
+    if (started) {
+      a = window.setTimeout(() => {
+        setSeconds((seconds) => seconds - 1);
+
+        if (seconds <= 0) {
+          dispatch({ type: "RESET_TIME" });
+          setStarted(false);
+        }
+      }, 1000);
+      console.log("oi");
+    }
+    return () => {
+      a && clearTimeout(a);
+    };
+  }, [seconds, started]);
 
   return (
     <div className={styles.container}>
@@ -64,6 +136,9 @@ const Timer: React.FC = () => {
           4
         </div>
       </div>
+      <button onClick={handleStart} className={styles.button}>
+        start
+      </button>
       <span>{toTime(seconds)}</span>
     </div>
   );
