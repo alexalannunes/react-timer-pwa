@@ -8,6 +8,16 @@
   font-weight: bold;
   font-size: 32vw;
 
+  .button {
+    position: fixed;
+    bottom: 30px;
+    height: 70px;
+    width: 70px;
+    border-radius: 50%;
+    border: none;
+    z-index: 2;
+  }
+
   div.containerActions {
     position: fixed;
     top: 0;
