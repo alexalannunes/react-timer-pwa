@@ -138,8 +138,6 @@ const Timer: React.FC = () => {
     setStarted(true);
   };
 
-  console.log("oi");
-
   useEffect(() => {
     let a: number;
     if (started) {
@@ -152,7 +150,6 @@ const Timer: React.FC = () => {
           audioRef.current?.play();
         }
       }, 1000);
-      console.log("oi");
     }
 
     return () => {
