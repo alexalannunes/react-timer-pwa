@@ -3,9 +3,11 @@ import React, {
   useCallback,
   useEffect,
   useReducer,
+  useRef,
   useState,
 } from "react";
 import styles from "./styles.module.scss";
+import audio from "../assets/Clay-Chime-Thunk.wav";
 const toTime = (seconds: number) =>
   new Date(seconds * 1000).toISOString().substr(14, 5);
 
@@ -63,6 +65,7 @@ const toSeconds = (time: string) => {
 };
 
 const Timer: React.FC = () => {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const [time, dispatch] = useReducer<Reducer<State, Action>>(timerReducer, {
     min: 0,
     sec: 0,
@@ -111,10 +114,12 @@ const Timer: React.FC = () => {
         if (seconds <= 0) {
           dispatch({ type: "RESET_TIME" });
           setStarted(false);
+          audioRef.current?.play();
         }
       }, 1000);
       console.log("oi");
     }
+
     return () => {
       a && clearTimeout(a);
     };
@@ -140,6 +145,7 @@ const Timer: React.FC = () => {
         start
       </button>
       <span>{toTime(seconds)}</span>
+      <audio ref={audioRef} src={audio}></audio>
     </div>
   );
 };
