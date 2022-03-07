@@ -134,9 +134,9 @@ const Timer: React.FC = () => {
     });
   }, [time.sec]);
 
-  const handleStart = () => {
-    setStarted(true);
-  };
+  const handleStart = useCallback(() => {
+    setStarted(!started);
+  }, [started]);
 
   useEffect(() => {
     let a: number;
