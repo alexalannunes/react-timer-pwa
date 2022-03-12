@@ -8,6 +8,17 @@
   font-weight: bold;
   font-size: 32vw;
 
+  .timerSeconds {
+    transition: transform 0.3s ease-out;
+
+    &.timerState__Started {
+      transform: translateY(0);
+    }
+    &.timerState__PausedNotStarted {
+      transform: translateY(-40px);
+    }
+  }
+
   .button {
     position: fixed;
     bottom: 30px;
@@ -17,6 +28,14 @@
     border: none;
     z-index: 2;
     cursor: pointer;
+    transition: transform 0.3s ease-out;
+
+    &.timerState__Started {
+      transform: scale(0) rotateZ(180deg);
+    }
+    &.timerState__PausedNotStarted {
+      transform: scale(1) rotateZ(0);
+    }
   }
 
   div.containerActions {
@@ -36,7 +55,7 @@
       align-items: center;
       justify-content: center;
       font-size: 13vw;
-      opacity: 0.2;
+      opacity: 0;
       &:nth-child(1) {
         background: red;
       }

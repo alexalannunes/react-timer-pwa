@@ -8,7 +8,7 @@ import React, {
   useState,
 } from "react";
 import styles from "./styles.module.scss";
-import audio from "../assets/Clay-Chime-Thunk.wav";
+import audio from "../assets/Clear-Long-Bell-02.wav";
 
 interface IconProps {
   size?: number;
@@ -58,6 +58,7 @@ interface Action {
     | "DECREASE_MINUTE"
     | "INCREASE_SECOND"
     | "DECREASE_SECOND";
+  payload?: any;
 }
 
 const timerReducer = (state: State, action: Action) => {
@@ -66,7 +67,7 @@ const timerReducer = (state: State, action: Action) => {
       return {
         ...state,
         min: 0,
-        sec: 0,
+        sec: action.payload, // action.payload,
       };
     case "INCREASE_MINUTE":
       return {
@@ -153,10 +154,13 @@ const Timer: React.FC = () => {
         setSeconds((seconds) => seconds - 1);
 
         if (seconds <= 0) {
-          dispatch({ type: "RESET_TIME" });
+          dispatch({ type: "RESET_TIME", payload: 4 });
           setStarted(false);
           audioRef.current?.play();
-          document.body.className = "dark";
+          document.body.classList.add("dark");
+          setTimeout(() => {
+            document.body.classList.remove("dark");
+          }, 1200);
         }
       }, 1000);
     }
@@ -182,10 +186,25 @@ const Timer: React.FC = () => {
           4
         </div>
       </div>
-      <button onClick={handleStart} className={styles.button}>
+      <button
+        onClick={handleStart}
+        className={`${styles.button} ${
+          started
+            ? styles.timerState__Started
+            : styles.timerState__PausedNotStarted
+        }`}
+      >
         {started ? <PauseIcon size={50} /> : <PlayIcon size={50} />}
       </button>
-      <span>{toTime(seconds)}</span>
+      <span
+        className={`${styles.timerSeconds} ${
+          started
+            ? styles.timerState__Started
+            : styles.timerState__PausedNotStarted
+        }`}
+      >
+        {toTime(seconds)}
+      </span>
       <audio ref={audioRef} src={audio}></audio>
     </div>
   );

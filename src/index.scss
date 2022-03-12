@@ -23,10 +23,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background: $primary;
   color: $light;
+  transition: background 0.3s linear;
 }
 
 body.dark {
-  transition: background 0.3s linear;
   background: $primary-red;
 }
 
