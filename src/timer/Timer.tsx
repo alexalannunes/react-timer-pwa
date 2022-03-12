@@ -119,7 +119,7 @@ const Timer: React.FC = () => {
         type: "INCREASE_MINUTE",
       });
     }
-  }, [time.min, started]);
+  }, [started]);
 
   const handleSecondsUp = useCallback(() => {
     if (!started) {
@@ -127,21 +127,21 @@ const Timer: React.FC = () => {
         type: "INCREASE_SECOND",
       });
     }
-  }, [time.sec, started]);
+  }, [started]);
   const handleMinutesDown = useCallback(() => {
     if (!started) {
       dispatch({
         type: "DECREASE_MINUTE",
       });
     }
-  }, [time.min, started]);
+  }, [started]);
   const handleSecondsDown = useCallback(() => {
     if (!started) {
       dispatch({
         type: "DECREASE_SECOND",
       });
     }
-  }, [time.sec, started]);
+  }, [started]);
 
   const handleStart = useCallback(() => {
     setStarted(!started);
