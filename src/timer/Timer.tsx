@@ -103,7 +103,7 @@ const Timer: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [time, dispatch] = useReducer<Reducer<State, Action>>(timerReducer, {
     min: 0,
-    sec: 0,
+    sec: 4,
   });
   const [seconds, setSeconds] = useState(0);
   const [started, setStarted] = useState(false);
@@ -113,26 +113,34 @@ const Timer: React.FC = () => {
   }, [time]);
 
   const handleMinutesUp = useCallback(() => {
-    dispatch({
-      type: "INCREASE_MINUTE",
-    });
-  }, [time.min]);
+    if (!started) {
+      dispatch({
+        type: "INCREASE_MINUTE",
+      });
+    }
+  }, [time.min, started]);
 
   const handleSecondsUp = useCallback(() => {
-    dispatch({
-      type: "INCREASE_SECOND",
-    });
-  }, [time.sec]);
+    if (!started) {
+      dispatch({
+        type: "INCREASE_SECOND",
+      });
+    }
+  }, [time.sec, started]);
   const handleMinutesDown = useCallback(() => {
-    dispatch({
-      type: "DECREASE_MINUTE",
-    });
-  }, [time.min]);
+    if (!started) {
+      dispatch({
+        type: "DECREASE_MINUTE",
+      });
+    }
+  }, [time.min, started]);
   const handleSecondsDown = useCallback(() => {
-    dispatch({
-      type: "DECREASE_SECOND",
-    });
-  }, [time.sec]);
+    if (!started) {
+      dispatch({
+        type: "DECREASE_SECOND",
+      });
+    }
+  }, [time.sec, started]);
 
   const handleStart = useCallback(() => {
     setStarted(!started);
@@ -148,6 +156,7 @@ const Timer: React.FC = () => {
           dispatch({ type: "RESET_TIME" });
           setStarted(false);
           audioRef.current?.play();
+          document.body.className = "dark";
         }
       }, 1000);
     }
