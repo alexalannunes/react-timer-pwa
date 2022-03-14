@@ -104,7 +104,7 @@ const Timer: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [time, dispatch] = useReducer<Reducer<State, Action>>(timerReducer, {
     min: 0,
-    sec: 4,
+    sec: 10,
   });
   const [seconds, setSeconds] = useState(0);
   const [started, setStarted] = useState(false);
