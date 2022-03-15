@@ -43,8 +43,16 @@ const PlayIcon: FC<IconProps> = ({ size = 24, color = "#000000" }) => (
   </svg>
 );
 
-const toTime = (seconds: number) =>
-  new Date(seconds * 1000).toISOString().substr(14, 5);
+// const toTime = (seconds: number) =>
+//   new Date(seconds * 1000).toISOString().substr(14, 5);
+
+const toHHMMSS = function (seconds: number) {
+  var hours = Math.floor(seconds / 3600);
+  var minutes = Math.floor((seconds - hours * 3600) / 60);
+  var sec = seconds - hours * 3600 - minutes * 60;
+
+  return `${String(minutes).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
+};
 
 interface State {
   min: number;
@@ -54,6 +62,7 @@ interface State {
 interface Action {
   type:
     | "RESET_TIME"
+    | "SET_TIME"
     | "INCREASE_MINUTE"
     | "DECREASE_MINUTE"
     | "INCREASE_SECOND"
@@ -67,8 +76,15 @@ const timerReducer = (state: State, action: Action) => {
       return {
         ...state,
         min: 0,
-        sec: action.payload, // action.payload,
+        sec: 0, // store defined value
       };
+    case "SET_TIME": {
+      return {
+        ...state,
+        min: action.payload.min,
+        sec: action.payload.sec,
+      };
+    }
     case "INCREASE_MINUTE":
       return {
         ...state,
@@ -111,7 +127,7 @@ const Timer: React.FC = () => {
 
   useEffect(() => {
     setSeconds(toSeconds(`${time.min}:${time.sec}`));
-  }, [time]);
+  }, [time, started]);
 
   const handleMinutesUp = useCallback(() => {
     if (!started) {
@@ -148,13 +164,40 @@ const Timer: React.FC = () => {
   }, [started]);
 
   useEffect(() => {
+    console.log(seconds);
+  }, [seconds]);
+
+  useEffect(() => {
+    if (time.sec < 0) {
+      dispatch({
+        type: "SET_TIME",
+        payload: {
+          min: 59,
+          sec: 59,
+        },
+      });
+    }
+    if (time.min < 0) {
+      dispatch({
+        type: "SET_TIME",
+        payload: {
+          min: 59,
+          sec: 0,
+        },
+      });
+    }
+  }, [time]);
+
+  useEffect(() => {
+    console.log("opa");
     let a: number;
     if (started) {
       a = window.setTimeout(() => {
         setSeconds((seconds) => seconds - 1);
 
+        //
         if (seconds <= 0) {
-          dispatch({ type: "RESET_TIME", payload: 4 });
+          dispatch({ type: "RESET_TIME", payload: 10 });
           setStarted(false);
           audioRef.current?.play();
           document.body.classList.add("dark");
@@ -203,7 +246,7 @@ const Timer: React.FC = () => {
             : styles.timerState__PausedNotStarted
         }`}
       >
-        {toTime(seconds)}
+        {toHHMMSS(seconds)}
       </span>
       <audio ref={audioRef} src={audio}></audio>
     </div>
