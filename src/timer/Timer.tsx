@@ -15,7 +15,7 @@ interface IconProps {
   color?: string;
 }
 
-const PauseIcon: FC<IconProps> = ({ size = 24, color = "#000000" }) => (
+const PauseIcon: FC<IconProps> = ({ size = 24, color = "#282c34" }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     style={{ height: `${size}px`, width: `${size}px` }}
@@ -29,7 +29,7 @@ const PauseIcon: FC<IconProps> = ({ size = 24, color = "#000000" }) => (
   </svg>
 );
 
-const PlayIcon: FC<IconProps> = ({ size = 24, color = "#000000" }) => (
+const PlayIcon: FC<IconProps> = ({ size = 24, color = "#282c34" }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     style={{ height: `${size}px`, width: `${size}px` }}
@@ -42,9 +42,6 @@ const PlayIcon: FC<IconProps> = ({ size = 24, color = "#000000" }) => (
     <path d="M10 8.64L15.27 12 10 15.36V8.64M8 5v14l11-7L8 5z" />
   </svg>
 );
-
-// const toTime = (seconds: number) =>
-//   new Date(seconds * 1000).toISOString().substr(14, 5);
 
 const toHHMMSS = function (seconds: number) {
   var hours = Math.floor(seconds / 3600);
