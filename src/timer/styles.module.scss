@@ -31,10 +31,10 @@
     transition: transform 0.3s ease-out;
 
     &.timerState__Started {
-      transform: scale(0) rotateZ(180deg);
+      transform: rotateZ(180deg);
     }
     &.timerState__PausedNotStarted {
-      transform: scale(1) rotateZ(0);
+      transform: rotateZ(0);
     }
   }
 
