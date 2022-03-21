@@ -1,5 +1,4 @@
 import React, {
-  FC,
   Reducer,
   useCallback,
   useEffect,
@@ -7,111 +6,19 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { PauseIcon, PlayIcon } from "./Icons";
+import {
+  Action,
+  decreaseMinute,
+  decreaseSecond,
+  increaseMinute,
+  increaseSecond,
+  State,
+  timerReducer,
+} from "./timerReducer";
+import { toHHMMSS, toSeconds } from "./utils";
 import styles from "./styles.module.scss";
 import audio from "../assets/Clear-Long-Bell-02.wav";
-
-interface IconProps {
-  size?: number;
-  color?: string;
-}
-
-const PauseIcon: FC<IconProps> = ({ size = 24, color = "#282c34" }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    style={{ height: `${size}px`, width: `${size}px` }}
-    height={24}
-    width={24}
-    viewBox="0 0 24 24"
-    fill={color}
-  >
-    <path d="M0 0h24v24H0V0z" fill="none" />
-    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-  </svg>
-);
-
-const PlayIcon: FC<IconProps> = ({ size = 24, color = "#282c34" }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    style={{ height: `${size}px`, width: `${size}px` }}
-    height={24}
-    width={24}
-    viewBox="0 0 24 24"
-    fill={color}
-  >
-    <path d="M0 0h24v24H0V0z" fill="none" />
-    <path d="M10 8.64L15.27 12 10 15.36V8.64M8 5v14l11-7L8 5z" />
-  </svg>
-);
-
-const toHHMMSS = function (seconds: number) {
-  var hours = Math.floor(seconds / 3600);
-  var minutes = Math.floor((seconds - hours * 3600) / 60);
-  var sec = seconds - hours * 3600 - minutes * 60;
-
-  return `${String(minutes).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
-};
-
-interface State {
-  min: number;
-  sec: number;
-}
-
-interface Action {
-  type:
-    | "RESET_TIME"
-    | "SET_TIME"
-    | "INCREASE_MINUTE"
-    | "DECREASE_MINUTE"
-    | "INCREASE_SECOND"
-    | "DECREASE_SECOND";
-  payload?: any;
-}
-
-const timerReducer = (state: State, action: Action) => {
-  switch (action.type) {
-    case "RESET_TIME":
-      return {
-        ...state,
-        min: 0,
-        sec: 0, // store defined value
-      };
-    case "SET_TIME": {
-      return {
-        ...state,
-        min: action.payload.min,
-        sec: action.payload.sec,
-      };
-    }
-    case "INCREASE_MINUTE":
-      return {
-        ...state,
-        min: state.min + 1,
-      };
-    case "DECREASE_MINUTE":
-      return {
-        ...state,
-        min: state.min - 1,
-      };
-    case "INCREASE_SECOND":
-      return {
-        ...state,
-        sec: state.sec + 1,
-      };
-    case "DECREASE_SECOND":
-      return {
-        ...state,
-        sec: state.sec - 1,
-      };
-    default:
-      return state;
-  }
-};
-
-const toSeconds = (time: string) => {
-  return time.split(":").reduce((acc, time) => {
-    return 60 * acc + +time;
-  }, 0);
-};
 
 const Timer: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -128,31 +35,23 @@ const Timer: React.FC = () => {
 
   const handleMinutesUp = useCallback(() => {
     if (!started) {
-      dispatch({
-        type: "INCREASE_MINUTE",
-      });
+      dispatch(increaseMinute());
     }
   }, [started]);
 
   const handleSecondsUp = useCallback(() => {
     if (!started) {
-      dispatch({
-        type: "INCREASE_SECOND",
-      });
+      dispatch(increaseSecond());
     }
   }, [started]);
   const handleMinutesDown = useCallback(() => {
     if (!started) {
-      dispatch({
-        type: "DECREASE_MINUTE",
-      });
+      dispatch(decreaseMinute());
     }
   }, [started]);
   const handleSecondsDown = useCallback(() => {
     if (!started) {
-      dispatch({
-        type: "DECREASE_SECOND",
-      });
+      dispatch(decreaseSecond());
     }
   }, [started]);
 
@@ -186,13 +85,11 @@ const Timer: React.FC = () => {
   }, [time]);
 
   useEffect(() => {
-    console.log("opa");
-    let a: number;
+    let timeoutInstance: number;
     if (started) {
-      a = window.setTimeout(() => {
+      timeoutInstance = window.setTimeout(() => {
         setSeconds((seconds) => seconds - 1);
 
-        //
         if (seconds <= 0) {
           dispatch({ type: "RESET_TIME", payload: 10 });
           setStarted(false);
@@ -206,7 +103,7 @@ const Timer: React.FC = () => {
     }
 
     return () => {
-      a && clearTimeout(a);
+      timeoutInstance && clearTimeout(timeoutInstance);
     };
   }, [seconds, started]);
 
