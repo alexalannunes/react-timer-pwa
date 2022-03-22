@@ -1,3 +1,6 @@
+# React Timer
+
+Your next time manager
 
 #### References
 * https://w3c.github.io/manifest/#display-member
