@@ -16,7 +16,7 @@ import {
   State,
   timerReducer,
 } from "./timerReducer";
-import { toHHMMSS, toSeconds } from "./utils";
+import { toMMSS, toSeconds } from "./utils";
 import styles from "./styles.module.scss";
 import audio from "../assets/Clear-Long-Bell-02.wav";
 
@@ -58,10 +58,6 @@ const Timer: React.FC = () => {
   const handleStart = useCallback(() => {
     setStarted(!started);
   }, [started]);
-
-  useEffect(() => {
-    console.log(seconds);
-  }, [seconds]);
 
   useEffect(() => {
     if (time.sec < 0) {
@@ -110,20 +106,17 @@ const Timer: React.FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.containerActions}>
-        <div role="button" onClick={handleMinutesUp}>
-          1
-        </div>
-        <div role="button" onClick={handleSecondsUp}>
-          2
-        </div>
-        <div role="button" onClick={handleMinutesDown}>
-          3
-        </div>
-        <div role="button" onClick={handleSecondsDown}>
-          4
-        </div>
+        <div
+          data-testid="increase-minute"
+          role="button"
+          onClick={handleMinutesUp}
+        />
+        <div role="button" onClick={handleSecondsUp} />
+        <div role="button" onClick={handleMinutesDown} />
+        <div role="button" onClick={handleSecondsDown} />
       </div>
       <button
+        data-testid="btn-toggle-timer"
         onClick={handleStart}
         className={`${styles.button} ${
           started
@@ -139,8 +132,9 @@ const Timer: React.FC = () => {
             ? styles.timerState__Started
             : styles.timerState__PausedNotStarted
         }`}
+        data-testid="timer-content"
       >
-        {toHHMMSS(seconds)}
+        {toMMSS(seconds)}
       </span>
       <audio ref={audioRef} src={audio}></audio>
     </div>

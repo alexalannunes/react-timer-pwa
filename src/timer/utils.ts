@@ -1,4 +1,4 @@
-export const toHHMMSS = function (seconds: number) {
+export const toMMSS = function (seconds: number) {
   var hours = Math.floor(seconds / 3600);
   var minutes = Math.floor((seconds - hours * 3600) / 60);
   var sec = seconds - hours * 3600 - minutes * 60;
