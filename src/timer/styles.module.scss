@@ -59,6 +59,7 @@
       opacity: 0;
       &:nth-child(1) {
         background: red;
+        position: relative;
       }
       &:nth-child(2) {
         background: #111;

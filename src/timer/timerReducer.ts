@@ -3,6 +3,15 @@ export interface State {
   sec: number;
 }
 
+export const ActionTypes = {
+  RESET_TIME: "RESET_TIME",
+  SET_TIME: "SET_TIME",
+  INCREASE_MINUTE: "INCREASE_MINUTE",
+  DECREASE_MINUTE: "DECREASE_MINUTE",
+  INCREASE_SECOND: "INCREASE_SECOND",
+  DECREASE_SECOND: "DECREASE_SECOND",
+} as const;
+
 export interface Action {
   type:
     | "RESET_TIME"
@@ -16,35 +25,35 @@ export interface Action {
 
 export const timerReducer = (state: State, action: Action) => {
   switch (action.type) {
-    case "RESET_TIME":
+    case ActionTypes.RESET_TIME:
       return {
         ...state,
         min: 0,
         sec: 0, // store defined value
       };
-    case "SET_TIME": {
+    case ActionTypes.SET_TIME: {
       return {
         ...state,
         min: action.payload.min,
         sec: action.payload.sec,
       };
     }
-    case "INCREASE_MINUTE":
+    case ActionTypes.INCREASE_MINUTE:
       return {
         ...state,
         min: state.min + 1,
       };
-    case "DECREASE_MINUTE":
+    case ActionTypes.DECREASE_MINUTE:
       return {
         ...state,
         min: state.min - 1,
       };
-    case "INCREASE_SECOND":
+    case ActionTypes.INCREASE_SECOND:
       return {
         ...state,
         sec: state.sec + 1,
       };
-    case "DECREASE_SECOND":
+    case ActionTypes.DECREASE_SECOND:
       return {
         ...state,
         sec: state.sec - 1,
@@ -54,18 +63,23 @@ export const timerReducer = (state: State, action: Action) => {
   }
 };
 
+export const setTime = (payload: { min: number; sec: number }): Action => ({
+  type: ActionTypes.SET_TIME,
+  payload,
+});
+
 export const increaseMinute = (): Action => ({
-  type: "INCREASE_MINUTE",
+  type: ActionTypes.INCREASE_MINUTE,
 });
 
 export const decreaseMinute = (): Action => ({
-  type: "DECREASE_MINUTE",
+  type: ActionTypes.DECREASE_MINUTE,
 });
 
 export const increaseSecond = (): Action => ({
-  type: "INCREASE_SECOND",
+  type: ActionTypes.INCREASE_SECOND,
 });
 
 export const decreaseSecond = (): Action => ({
-  type: "DECREASE_SECOND",
+  type: ActionTypes.DECREASE_SECOND,
 });
