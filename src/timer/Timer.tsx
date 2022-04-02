@@ -134,6 +134,7 @@ const Timer: React.FC = () => {
 
   return (
     <div className={styles.container}>
+      <div>Tap to increment or decrement numbers</div>
       <div className={styles.containerActions}>
         <div
           data-testid="increase-minute"
