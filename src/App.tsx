@@ -1,7 +1,12 @@
-import Timer from './timer/Timer';
+import Timer from "./timer/Timer";
+import { TimerProvider } from "./timer/timerContext";
 
 function App() {
-  return <Timer />
+  return (
+    <TimerProvider>
+      <Timer />
+    </TimerProvider>
+  );
 }
 
 export default App;

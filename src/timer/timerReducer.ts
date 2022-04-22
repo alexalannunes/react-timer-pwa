@@ -1,16 +1,4 @@
-export interface State {
-  min: number;
-  sec: number;
-}
-
-export const ActionTypes = {
-  RESET_TIME: "RESET_TIME",
-  SET_TIME: "SET_TIME",
-  INCREASE_MINUTE: "INCREASE_MINUTE",
-  DECREASE_MINUTE: "DECREASE_MINUTE",
-  INCREASE_SECOND: "INCREASE_SECOND",
-  DECREASE_SECOND: "DECREASE_SECOND",
-} as const;
+import { State } from "../types";
 
 export interface Action {
   type:
@@ -19,67 +7,80 @@ export interface Action {
     | "INCREASE_MINUTE"
     | "DECREASE_MINUTE"
     | "INCREASE_SECOND"
-    | "DECREASE_SECOND";
+    | "DECREASE_SECOND"
+    | "START_TIMER"
+    | "PAUSE_TIMER"
+    | "END_TIMER";
   payload?: any;
 }
 
 export const timerReducer = (state: State, action: Action) => {
   switch (action.type) {
-    case ActionTypes.RESET_TIME:
+    case "RESET_TIME":
       return {
         ...state,
         min: 0,
-        sec: 0, // store defined value
+        sec: 0,
       };
-    case ActionTypes.SET_TIME: {
+    case "SET_TIME": {
       return {
         ...state,
         min: action.payload.min,
         sec: action.payload.sec,
       };
     }
-    case ActionTypes.INCREASE_MINUTE:
+    case "INCREASE_MINUTE":
       return {
         ...state,
         min: state.min + 1,
       };
-    case ActionTypes.DECREASE_MINUTE:
+    case "DECREASE_MINUTE":
       return {
         ...state,
         min: state.min - 1,
       };
-    case ActionTypes.INCREASE_SECOND:
+    case "INCREASE_SECOND":
       return {
         ...state,
         sec: state.sec + 1,
       };
-    case ActionTypes.DECREASE_SECOND:
+    case "DECREASE_SECOND":
       return {
         ...state,
         sec: state.sec - 1,
       };
+    case "START_TIMER": {
+      return {
+        ...state,
+        started: true,
+      };
+    }
     default:
       return state;
   }
 };
 
+export const startTimer = (): Action => ({
+  type: "START_TIMER",
+});
+
 export const setTime = (payload: { min: number; sec: number }): Action => ({
-  type: ActionTypes.SET_TIME,
+  type: "SET_TIME",
   payload,
 });
 
 export const increaseMinute = (): Action => ({
-  type: ActionTypes.INCREASE_MINUTE,
+  type: "INCREASE_MINUTE",
 });
 
 export const decreaseMinute = (): Action => ({
-  type: ActionTypes.DECREASE_MINUTE,
+  type: "DECREASE_MINUTE",
 });
 
 export const increaseSecond = (): Action => ({
-  type: ActionTypes.INCREASE_SECOND,
+  type: "INCREASE_SECOND",
 });
 
 export const decreaseSecond = (): Action => ({
-  type: ActionTypes.DECREASE_SECOND,
+  type: "DECREASE_SECOND",
 });

@@ -8,15 +8,14 @@
   font-weight: bold;
   font-size: 32vw;
 
-  .timerSeconds {
-    transition: transform 0.3s ease-out;
-
-    &.timerState__Started {
-      transform: translateY(0);
-    }
-    &.timerState__PausedNotStarted {
-      transform: translateY(-40px);
-    }
+  .howToUse {
+    /* adjust when resizing */
+    position: absolute;
+    top: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
   }
 
   .button {
@@ -30,13 +29,6 @@
     cursor: pointer;
     transition: transform 0.3s ease-out;
     background: #fff;
-
-    &.timerState__Started {
-      transform: rotateZ(180deg);
-    }
-    &.timerState__PausedNotStarted {
-      transform: rotateZ(0);
-    }
   }
 
   div.containerActions {
