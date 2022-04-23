@@ -8,8 +8,15 @@ import { toMMSS } from "./utils";
 const Timer: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const { seconds, minutsUp, minutsDown, secondsDown, secondsUp, startTimer } =
-    useTimer();
+  const {
+    seconds,
+    minutsUp,
+    minutsDown,
+    secondsDown,
+    secondsUp,
+    startTimer,
+    pauseTimer,
+  } = useTimer();
 
   return (
     <div className={styles.container}>
@@ -36,6 +43,7 @@ const Timer: React.FC = () => {
         data-action="btn-pause"
         className={`${styles.button}`}
         style={{ marginLeft: 100 }}
+        onClick={pauseTimer}
       >
         <PauseIcon size={50} />
       </button>

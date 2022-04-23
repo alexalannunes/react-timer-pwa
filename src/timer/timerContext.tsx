@@ -3,14 +3,14 @@ import {
   ReactNode,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import { StateContextType } from "../types";
 import { toSeconds } from "./utils";
 
 const TimerContext = createContext<StateContextType>({
-  min: 0,
-  sec: 0,
+  timer: { min: 0, sec: 0 },
   seconds: 10,
   started: false,
   ended: false,
@@ -37,9 +37,14 @@ export const TimerProvider = ({ children }: { children: ReactNode }) => {
   const [paused, dispatchPaused] = useState(false);
   const [ended, dispatchEnded] = useState(false);
 
+  const intervalRef = useRef<number>();
+
   const startTimer = () => {
     dispatchStarted(true);
     dispatchEnded(false);
+    if (paused) {
+      dispatchPaused(false);
+    }
   };
   const pauseTimer = () => {
     dispatchPaused(true);
@@ -51,31 +56,39 @@ export const TimerProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const handleMinutesUp = () => {
-    dispatchTimer((prev) => ({
-      ...prev,
-      min: prev.min + 1,
-    }));
+    if (!started) {
+      dispatchTimer((prev) => ({
+        ...prev,
+        min: prev.min + 1,
+      }));
+    }
   };
 
   const handleMinutesDown = () => {
-    dispatchTimer((prev) => ({
-      ...prev,
-      min: prev.min - 1,
-    }));
+    if (!started) {
+      dispatchTimer((prev) => ({
+        ...prev,
+        min: prev.min - 1,
+      }));
+    }
   };
 
   const handleSecondsUp = () => {
-    dispatchTimer((prev) => ({
-      ...prev,
-      sec: prev.sec + 1,
-    }));
+    if (!started) {
+      dispatchTimer((prev) => ({
+        ...prev,
+        sec: prev.sec + 1,
+      }));
+    }
   };
 
   const handleSecondsDown = () => {
-    dispatchTimer((prev) => ({
-      ...prev,
-      sec: prev.sec - 1,
-    }));
+    if (!started) {
+      dispatchTimer((prev) => ({
+        ...prev,
+        sec: prev.sec - 1,
+      }));
+    }
   };
 
   const setSeconds = (seconds: number) => {
@@ -84,8 +97,7 @@ export const TimerProvider = ({ children }: { children: ReactNode }) => {
 
   const value = {
     seconds,
-    min: timer.min,
-    sec: timer.sec,
+    timer,
     started,
     ended,
     paused,
@@ -104,17 +116,26 @@ export const TimerProvider = ({ children }: { children: ReactNode }) => {
   }, [timer]);
 
   useEffect(() => {
-    let interval: number;
-
-    if (started) {
-      interval = window.setTimeout(() => {
+    if (started && !paused) {
+      intervalRef.current = window.setTimeout(() => {
         setSeconds(seconds - 1);
         console.log(seconds);
       }, 1000);
     }
 
-    return () => clearTimeout(interval);
-  }, [seconds, started]);
+    if (seconds <= 0) {
+      endTimer();
+      clearTimeout(intervalRef.current);
+    }
+
+    return () => clearTimeout(intervalRef.current);
+  }, [seconds, started, paused]);
+
+  useEffect(() => {
+    if (paused) {
+      intervalRef.current && clearTimeout(intervalRef.current);
+    }
+  }, [paused]);
 
   return (
     <TimerContext.Provider value={value}>{children}</TimerContext.Provider>
