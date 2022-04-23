@@ -1,6 +1,8 @@
 export interface State {
-  min: number;
-  sec: number;
+  timer: {
+    min: number;
+    sec: number;
+  };
   seconds: number;
   started: boolean;
   paused: boolean;
