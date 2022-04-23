@@ -1,5 +1,12 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { StateContextType } from "../types";
+import { toSeconds } from "./utils";
 
 const TimerContext = createContext<StateContextType>({
   min: 0,
@@ -88,9 +95,26 @@ export const TimerProvider = ({ children }: { children: ReactNode }) => {
     setSeconds,
     minutsUp: handleMinutesUp,
     minutsDown: handleMinutesDown,
-    secondsUp: () => handleSecondsUp,
-    secondsDown: () => handleSecondsDown,
+    secondsUp: handleSecondsUp,
+    secondsDown: handleSecondsDown,
   };
+
+  useEffect(() => {
+    setSeconds(Math.abs(toSeconds(`${timer.min}:${timer.sec}`)));
+  }, [timer]);
+
+  useEffect(() => {
+    let interval: number;
+
+    if (started) {
+      interval = window.setTimeout(() => {
+        setSeconds(seconds - 1);
+        console.log(seconds);
+      }, 1000);
+    }
+
+    return () => clearTimeout(interval);
+  }, [seconds, started]);
 
   return (
     <TimerContext.Provider value={value}>{children}</TimerContext.Provider>

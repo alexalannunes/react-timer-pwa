@@ -8,7 +8,7 @@ import { toMMSS } from "./utils";
 const Timer: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const { startTimer, pauseTimer, endTimer, started, paused, ended } =
+  const { seconds, minutsUp, minutsDown, secondsDown, secondsUp, startTimer } =
     useTimer();
 
   return (
@@ -18,19 +18,16 @@ const Timer: React.FC = () => {
       </div>
 
       <div className={styles.containerActions}>
-        <button onClick={startTimer}>start {started ? 1 : 0}</button>
-        <button onClick={pauseTimer}>pause {paused ? 1 : 0}</button>
-        <button onClick={endTimer}>end {ended ? 1 : 0}</button>
-
-        <div data-testid="increase-minute" role="button" onClick={() => {}} />
-        <div role="button" />
-        <div role="button" />
-        <div role="button" />
+        <div role="button" onClick={minutsUp} />
+        <div role="button" onClick={secondsUp} />
+        <div role="button" onClick={minutsDown} />
+        <div role="button" onClick={secondsDown} />
       </div>
       <button
         data-testid="btn-toggle-timer"
         data-action="btn-play"
         className={`${styles.button}`}
+        onClick={startTimer}
       >
         <PlayIcon size={50} />
       </button>
@@ -42,7 +39,7 @@ const Timer: React.FC = () => {
       >
         <PauseIcon size={50} />
       </button>
-      <span data-testid="timer-content">{toMMSS(0)}</span>
+      <span data-testid="timer-content">{toMMSS(seconds)}</span>
       <audio ref={audioRef} src={audio}></audio>
     </div>
   );
