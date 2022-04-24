@@ -11,3 +11,11 @@ export const toSeconds = (time: string) => {
     return 60 * acc + +time;
   }, 0);
 };
+
+export const setBackgroundBody = () => {
+  document.body.classList.add("timer-ended");
+};
+
+export const removeBackgroundBody = () => {
+  document.body.classList.remove("timer-ended");
+};
