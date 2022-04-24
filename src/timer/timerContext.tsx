@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 import { StateContextType } from "../types";
-import { toSeconds } from "./utils";
+import { removeBackgroundBody, setBackgroundBody, toSeconds } from "./utils";
 
 const TimerContext = createContext<StateContextType>({
   timer: { min: 0, sec: 0 },
@@ -123,7 +123,7 @@ export const TimerProvider = ({ children }: { children: ReactNode }) => {
       }, 1000);
     }
 
-    if (seconds <= 0) {
+    if (started && seconds <= 0) {
       endTimer();
       clearTimeout(intervalRef.current);
     }
@@ -136,6 +136,19 @@ export const TimerProvider = ({ children }: { children: ReactNode }) => {
       intervalRef.current && clearTimeout(intervalRef.current);
     }
   }, [paused]);
+
+  useEffect(() => {
+    let endedTimeout: number;
+    if (ended) {
+      setBackgroundBody();
+      endedTimeout = window.setTimeout(() => {
+        removeBackgroundBody();
+      }, 1000);
+    } else {
+      removeBackgroundBody();
+    }
+    return () => clearTimeout(endedTimeout);
+  }, [ended]);
 
   return (
     <TimerContext.Provider value={value}>{children}</TimerContext.Provider>
