@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import audio from "../assets/Clear-Long-Bell-02.wav";
 import { PauseIcon, PlayIcon } from "./Icons";
 import styles from "./styles.module.scss";
@@ -16,7 +16,14 @@ const Timer: React.FC = () => {
     secondsUp,
     startTimer,
     pauseTimer,
+    ended,
   } = useTimer();
+
+  useEffect(() => {
+    if (ended) {
+      audioRef.current?.play();
+    }
+  }, [ended]);
 
   return (
     <div className={styles.container}>
