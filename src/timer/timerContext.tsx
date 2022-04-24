@@ -112,7 +112,7 @@ export const TimerProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
-    setSeconds(Math.abs(toSeconds(`${timer.min}:${timer.sec}`)));
+    setSeconds(toSeconds(`${timer.min}:${timer.sec}`));
   }, [timer]);
 
   useEffect(() => {
@@ -149,6 +149,36 @@ export const TimerProvider = ({ children }: { children: ReactNode }) => {
     }
     return () => clearTimeout(endedTimeout);
   }, [ended]);
+
+  useEffect(() => {
+    if (timer.min < 0) {
+      dispatchTimer((prev) => ({
+        ...prev,
+        min: 59,
+      }));
+      if (timer.sec === 0) {
+        dispatchTimer({
+          min: 59,
+          sec: 0,
+        });
+      }
+    }
+    if (timer.sec < 0) {
+      // todo
+      //bug: 01:00 to 00:59
+      // stay 01:59 (persist min)
+      dispatchTimer((prev) => ({
+        ...prev,
+        sec: 59,
+      }));
+      if (timer.min === 0) {
+        dispatchTimer({
+          min: 59,
+          sec: 59,
+        });
+      }
+    }
+  }, [timer]);
 
   return (
     <TimerContext.Provider value={value}>{children}</TimerContext.Provider>
