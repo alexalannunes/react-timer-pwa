@@ -27,9 +27,7 @@ const Timer: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.howToUse}>
-        Tap to increment or decrement numbers
-      </div>
+      <h6 className={styles.howToUse}>Tap to increment or decrement numbers</h6>
 
       <div className={styles.containerActions}>
         <div role="button" onClick={minutsUp} />
