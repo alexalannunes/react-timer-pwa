@@ -40,6 +40,9 @@ export const TimerProvider = ({ children }: { children: ReactNode }) => {
   const intervalRef = useRef<number>();
 
   const startTimer = () => {
+    if (seconds === 0) {
+      return;
+    }
     dispatchStarted(true);
     dispatchEnded(false);
     if (paused) {
@@ -144,6 +147,11 @@ export const TimerProvider = ({ children }: { children: ReactNode }) => {
       endedTimeout = window.setTimeout(() => {
         removeBackgroundBody();
       }, 1000);
+      setSeconds(0);
+      dispatchTimer({
+        min: 0,
+        sec: 0,
+      });
     } else {
       removeBackgroundBody();
     }
