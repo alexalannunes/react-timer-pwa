@@ -17,6 +17,8 @@ const Timer: React.FC = () => {
     startTimer,
     pauseTimer,
     ended,
+    started,
+    paused,
   } = useTimer();
 
   useEffect(() => {
@@ -35,23 +37,26 @@ const Timer: React.FC = () => {
         <div role="button" onClick={minutsDown} />
         <div role="button" onClick={secondsDown} />
       </div>
-      <button
-        data-testid="btn-toggle-timer"
-        data-action="btn-play"
-        className={`${styles.button}`}
-        onClick={startTimer}
-      >
-        <PlayIcon size={50} />
-      </button>
-      <button
-        data-testid="btn-toggle-timer"
-        data-action="btn-pause"
-        className={`${styles.button}`}
-        style={{ marginLeft: 100 }}
-        onClick={pauseTimer}
-      >
-        <PauseIcon size={50} />
-      </button>
+      {(!started || paused) && (
+        <button
+          data-testid="btn-toggle-timer"
+          data-action="btn-play"
+          className={`${styles.button}`}
+          onClick={startTimer}
+        >
+          <PlayIcon size={50} />
+        </button>
+      )}
+      {started && !ended && !paused && (
+        <button
+          data-testid="btn-toggle-timer"
+          data-action="btn-pause"
+          className={`${styles.button}`}
+          onClick={pauseTimer}
+        >
+          <PauseIcon size={50} />
+        </button>
+      )}
       <span data-testid="timer-content">{toMMSS(seconds)}</span>
       <audio ref={audioRef} src={audio}></audio>
     </div>
