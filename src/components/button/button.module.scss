@@ -1,0 +1,23 @@
+@import "../../styles/theme.scss";
+
+$size: 87px;
+.button {
+  width: $size;
+  height: $size;
+  border-radius: 50%;
+  background-color: $light;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+}
+
+.button.primary {
+  background-color: $secondary;
+  color: $light;
+}
+
+.button.secondary {
+  background-color: $light;
+  color: $primary-red;
+}
