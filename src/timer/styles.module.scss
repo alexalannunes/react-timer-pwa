@@ -6,7 +6,7 @@
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  font-size: 32vw;
+  font-size: clamp(5rem, 10vw, 7rem);
 
   .howToUse {
     /* adjust when resizing */
@@ -15,7 +15,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 16px;
+    font-size: 15px;
+    margin: 0;
   }
 
   .button {
