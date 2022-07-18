@@ -1,9 +1,23 @@
-import React, { useEffect, useRef } from "react";
+import React, { ReactNode, useEffect, useRef } from "react";
 import audio from "../assets/Clear-Long-Bell-02.wav";
-import { PauseIcon, PlayIcon } from "./Icons";
+import { ButtonRounded } from "../components/button";
 import styles from "./styles.module.scss";
 import { useTimer } from "./timerContext";
 import { toMMSS } from "./utils";
+
+const CenterButton: React.FC<{ children: ReactNode }> = ({ children }) => (
+  <div
+    style={{
+      position: "fixed",
+      left: "50%",
+      bottom: 40,
+      transform: "translateX(-50%)",
+      zIndex: 1,
+    }}
+  >
+    {children}
+  </div>
+);
 
 const Timer: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -42,24 +56,14 @@ const Timer: React.FC = () => {
         <div role="button" onClick={secondsDown} />
       </div>
       {(!started || paused) && (
-        <button
-          data-testid="btn-toggle-timer"
-          data-action="btn-play"
-          className={`${styles.button}`}
-          onClick={startTimer}
-        >
-          <PlayIcon size={50} />
-        </button>
+        <CenterButton>
+          <ButtonRounded icon="play" onClick={startTimer} />
+        </CenterButton>
       )}
       {started && !ended && !paused && (
-        <button
-          data-testid="btn-toggle-timer"
-          data-action="btn-pause"
-          className={`${styles.button}`}
-          onClick={pauseTimer}
-        >
-          <PauseIcon size={50} />
-        </button>
+        <CenterButton>
+          <ButtonRounded icon="pause" onClick={pauseTimer} />
+        </CenterButton>
       )}
       <span data-testid="timer-content">{toMMSS(seconds)}</span>
       <audio ref={audioRef} src={audio}></audio>
