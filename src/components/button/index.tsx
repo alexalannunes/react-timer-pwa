@@ -23,7 +23,11 @@ const ButtonRounded: React.FC<Props> = ({
       onClick={onClick}
       className={`${style.button} ${classNameVariant}`}
     >
-      {icon === "play" ? <FaPlay size={32} /> : <FaPause size={32} />}
+      {icon === "play" ? (
+        <FaPlay size={28} style={{ marginLeft: 5 }} />
+      ) : (
+        <FaPause size={28} />
+      )}
     </button>
   );
 };

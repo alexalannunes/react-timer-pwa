@@ -1,15 +1,16 @@
 @import "../../styles/theme.scss";
 
-$size: 87px;
+$size: 86px;
 .button {
-  width: $size;
-  height: $size;
+  width: clamp(54px, 5vw, $size);
+  height: clamp(54px, 5vw, $size);
   border-radius: 50%;
   background-color: $light;
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
+  cursor: pointer;
 }
 
 .button.primary {
