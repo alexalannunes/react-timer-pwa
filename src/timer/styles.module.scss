@@ -19,20 +19,6 @@
     margin: 0;
   }
 
-  .button {
-    position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 30px;
-    height: 70px;
-    width: 70px;
-    border-radius: 50%;
-    border: none;
-    z-index: 2;
-    cursor: pointer;
-    background: #fff;
-  }
-
   div.containerActions {
     position: fixed;
     top: 0;
