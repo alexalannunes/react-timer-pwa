@@ -186,6 +186,12 @@ export const TimerProvider = ({ children }: { children: ReactNode }) => {
         });
       }
     }
+    if (timer.min > 59) {
+      dispatchTimer((prev) => ({
+        ...prev,
+        min: 0,
+      }));
+    }
   }, [timer]);
 
   return (
